@@ -5,7 +5,10 @@ const wfm = {
                 resolve()
             }, ms)
         })
+    },
+    isUndefined(d) {
+        return typeof d === 'undefined'
     }
-}
+};
 
 export { wfm }
