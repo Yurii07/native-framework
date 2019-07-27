@@ -1,4 +1,4 @@
-import {WFMComponent} from "../../framework";
+import { WFMComponent } from "framework"
 
 class NotFound extends WFMComponent{
     constructor(config){
