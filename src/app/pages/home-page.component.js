@@ -11,14 +11,6 @@ class HomePageComponent extends WFMComponent{
         }
     }
 
-    onInit() {
-        console.log('Component init');
-    }
-
-    afterInit() {
-        console.log('Component after init');
-    }
-
     goToTabs(event) {
         event.preventDefault()
         router.navigate('tabs')

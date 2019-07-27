@@ -1,40 +1,30 @@
-import {router} from "../tools/router";
-import {wfm} from "../tools/util";
+import { renderComponent } from "framework/core/component/render-component"
+import { _ } from "framework/tools/util"
+import { RoutingModule } from "framework/core/routing/routing.module"
 
 export class Module {
-    constructor(config){
+    constructor(config) {
         this.components = config.components;
         this.bootstrapcomponent = config.bootstrap;
         this.routes = config.routes;
     }
 
     start() {
-        this.initComponents();
-        if (this.routes)  this.initRoutes()
+        initComponents(this.bootstrapcomponent, this.components);
+        initRouting(this.routes)
     }
-    initComponents(){
-        this.bootstrapcomponent.render();
-        this.components.forEach(this.renderComponent.bind(this))
-    }
-    initRoutes() {
-        window.addEventListener('hashchange', this.renderRoute.bind(this))
-        this.renderRoute()
-    }
-    renderRoute() {
-        let url = router.getUrl();
-        let route = this.routes.find(r => r.path ===url);
+}
 
-        if(wfm.isUndefined(route)) {
-            route = this.routes.find(r => r.path === '**')
-        }
-
-        document.querySelector('router-outlet').innerHTML = `<${route.component.selector}></${route.component.selector}>`
-        this.renderComponent(route.component)
+function initComponents (bootstrap, components) {
+    if(_.isUndefined(bootstrap)) {
+        throw  new Error(`Bootstrap component is not defined`)
     }
+    [bootstrap, ...components].forEach(renderComponent)
+}
 
-    renderComponent(c) {
-        if(!wfm.isUndefined(c.onInit)) c.onInit()
-        c.render()
-        if(!wfm.isUndefined(c.afterInit)) c.afterInit()
-    }
+function initRouting(routes) {
+    if(_.isUndefined(routes)) return
+
+    let routing = new RoutingModule(routes)
+    routing.init()
 }
